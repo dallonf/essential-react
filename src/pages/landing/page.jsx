@@ -4,12 +4,12 @@ import {IntlMixin} from 'react-intl';
 import {connect} from 'react-redux';
 import { getData } from "../../common/request";
 
-@connect(state => ({state}))
-@reactMixin.decorate(IntlMixin)
-export default class LandingPage extends React.Component {
+let LandingPage = React.createClass({
+  mixins: [IntlMixin],
+
   componentWillMount() {
     console.log("[LandingPage] will mount with server response: ", this.props.data.landing);
-  }
+  },
 
   render() {
     let { title } = this.props.data.landing;
@@ -17,12 +17,19 @@ export default class LandingPage extends React.Component {
     return (
       <div id="landing-page">
         <h1>{title}</h1>
-        <pre>{JSON.stringify(this.props.state)}</pre>
+        <pre>{JSON.stringify(this.props)}</pre>
       </div>
     );
-  }
+  },
 
-  static fetchData = function(params) {
-    return getData("/landing");
+  statics: {
+    fetchData: function(params) {
+      return getData("/landing");
+    }
   }
-}
+});
+
+let wrapped = connect(state => ({state}))(LandingPage);
+wrapped.fetchData = LandingPage.fetchData;
+
+export default wrapped;
