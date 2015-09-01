@@ -16,6 +16,8 @@ import Session from "./common/session";
 import LoggedOutRouter from "./routers/logged_out";
 import LoggedInRouter from "./routers/logged_in";
 
+import ContextWrapper from "./context-wrapper";
+
 
 // ID of the DOM element to mount app on
 const DOM_APP_EL_ID = "app";
@@ -77,6 +79,6 @@ let fetchData = function(routes, params) {
 // Start the router
 Router.run(routes, Router.HistoryLocation, function(Handler, state) {
   fetchData(state.routes, state.params).then((data) => {
-    React.render(<Handler data={data} />, document.getElementById(DOM_APP_EL_ID));
+    React.render(<ContextWrapper handler={Handler} data={data} />, document.getElementById(DOM_APP_EL_ID));
   });
 });
